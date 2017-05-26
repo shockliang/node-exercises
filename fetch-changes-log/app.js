@@ -3,12 +3,6 @@ const axios = require('axios');
 const argsOptions = require('./args.options.js')
 const request = require('request');
 
-const roleOption = {
-    describe: 'Role of Jenkins',
-    demand: true,
-    alias: 'r'
-};
-
 const argv = yargs
     .command('fetch', 'Fetch the changes log from jenkins job build', {
         role: argsOptions.roleOption,
