@@ -13,4 +13,11 @@ app.get('/', (req, res) => {
     })
 });
 
+app.get('/bad', (req, res) => {
+    res.send({
+        msg: 'Something wrong!',
+        errorCode: 9487
+    })
+});
+
 app.listen(3000);
