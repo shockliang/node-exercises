@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="style.css" type="text/css">
+        {{!--<link rel="stylesheet" href="style.css" type="text/css">--}}
     </head>
     <body>
         <h2>Summary</h2>
@@ -10,14 +10,15 @@
             <li>{{msg}}</li>
         {{/each}}
         </ul>
-        <h2>Details</h2>
+        <h2>Detail</h2>
         <div>
             <table class="pane" style="border:none ">
                 <tbody>
                     {{#each items}}
                     <tr class="pane">
-                        <td colspan="3" class="changeset"><a name="detail0"></a>
+                        <td colspan="3" style="padding-top: 20px;" class="changeset"><a name="detail0"></a>
                             <div class="changeset-message">
+                                <hr></hr>
                                 <b>修訂版次
                                 <a>{{revision}}</a>
                                 by <a>{{author.fullName}}</a>:
