@@ -1,18 +1,20 @@
 const fs = require('fs');
 const handlebars = require('handlebars');
 
-var output = (data) => {
-    var source = '';
+var output = (data, outputFileName) => {
     var template = '';
     var contents = '';
 
-    fs.readFile('./views/log.hbs','utf-8', (err, readData) => {
-        if(err) console.log(err);
-        source = readData;
-        template = handlebars.compile(source);
-        contents = template(data);
+    fs.readFile('./views/log.hbs','utf-8', (err, buffer) => {
+        if(err) {
+            return console.error(err);
+        }
 
-        fs.writeFile('content.html', contents, (err) => {
+        console.log(`output file name:${outputFileName}`);
+        template = handlebars.compile(buffer);
+        contents = template(data);
+        
+        fs.writeFile(outputFileName, contents, (err) => {
             if (err) {
                 return console.error(`Autsch! Failed to store template: ${err.message}.`);
             }

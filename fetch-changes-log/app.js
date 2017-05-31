@@ -13,6 +13,7 @@ const argv = yargs
         protocol: argsOptions.protocolOption,
         port: argsOptions.portOption,
         buildNumber: argsOptions.buildNumberOption,
+        outputFileName: argsOptions.outputFileNameOption,
     })
     .help()
     .alias('help', 'h')
@@ -27,8 +28,6 @@ console.log(apiUrl);
 
 axios.get(apiUrl
 ).then((response) => {
-    console.log(response.data.changeSet.items[0].msg);
-
     // For template tag using. Move the affected path data into the paths data
     // that make the data at the same level.
     response.data.changeSet.items.forEach((element, index, ary) => {
@@ -39,7 +38,7 @@ axios.get(apiUrl
         }
     });
 
-    fileExporter.output(response.data.changeSet);
+    fileExporter.output(response.data.changeSet, argv.outputFileName);
 
 }).catch((e) => {
     console.log(e);
