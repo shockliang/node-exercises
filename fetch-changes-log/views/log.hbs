@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {{!--<link rel="stylesheet" href="style.css" type="text/css">--}}
+    </head>
+    <body>
+        <h2>Summary</h2>
+        <ul class="log-summary">
+        {{#each items}}
+            <li>{{msg}}</li>
+        {{/each}}
+        </ul>
+        <h2>Detail</h2>
+        <div>
+            <table class="pane" style="border:none ">
+                <tbody>
+                    {{#each items}}
+                    <tr class="pane">
+                        <td colspan="3" style="padding-top: 20px;" class="changeset"><a name="detail0"></a>
+                            <div class="changeset-message">
+                                <hr></hr>
+                                <b>修訂版次
+                                <a>{{revision}}</a>
+                                by <a>{{author.fullName}}</a>:
+                                </b><br>{{msg}}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Change Type</th>
+                        <th style="text-align: left;">Path in Repository</th>
+                        <th style="text-align: left;">Path in Workspace</th>
+                    </tr>
+                        {{#each paths}}
+                        <tr>
+                            <td><a>{{editType}}</a></td>
+                            <td><a>{{file}}</a></td>
+                            <td>{{affectedPath}}</td> 
+                        
+                        </tr>
+                        {{/each}}
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

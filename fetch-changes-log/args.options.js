@@ -41,6 +41,13 @@ const portOption = {
     default: 80
 }
 
+const outputFileNameOption = {
+    describe: 'File name to output',
+    demand: false,
+    alias: 'n',
+    default: 'ChangesLog.html'
+}
+
 module.exports = {
     roleOption: roleOption,
     apiKeyOption: apiKeyOption,
@@ -48,7 +55,8 @@ module.exports = {
     buildNumberOption, buildNumberOption,
     hostOption: hostOption,
     protocolOption: protocolOption,
-    portOption: portOption
+    portOption: portOption,
+    outputFileNameOption: outputFileNameOption
 }
 
 
