@@ -2,6 +2,7 @@ const yargs = require('yargs');
 const axios = require('axios');
 const argsOptions = require('./args.options.js')
 const request = require('request');
+const fileExporter = require('./file-exporter.js');
 
 const argv = yargs
     .command('fetch', 'Fetch the changes log from jenkins job build', {
@@ -24,21 +25,22 @@ apiUrl = `${argv.protocol}://${argv.role}:${argv.apiKey}@${apiUrl}/job/${argv.jo
 
 console.log(apiUrl);
 
-// request({
-// url: apiUrl,
-// json: true
-// }, (error, response, body) => {
-//     if (error) {
-//         console.log(error);
-//         console.log(`Unable to connect to ${host} servers`);
-//     } else {
-//         console.log(body.changeSet.items[0].msg);
-//     }
-// });
-
 axios.get(apiUrl
 ).then((response) => {
     console.log(response.data.changeSet.items[0].msg);
+
+    // For template tag using. Move the affected path data into the paths data
+    // that make the data at the same level.
+    response.data.changeSet.items.forEach((element, index, ary) => {
+        var affectedPaths = element.affectedPaths;
+        for (var i = 0; i < affectedPaths.length; i++) {
+            var path = affectedPaths[i];
+            element.paths[i].affectedPath = path;
+        }
+    });
+
+    fileExporter.output(response.data.changeSet);
+
 }).catch((e) => {
     console.log(e);
 });
