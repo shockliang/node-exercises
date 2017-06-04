@@ -31,7 +31,7 @@ const {User} = require('./../server/models/user');
 //     console.log(e);
 // });
 
-var userId = 'g5932c3c4cd633e0deacb8df3';
+var userId = '5932c3c4cd633e0deacb8df3';
 User.findById(userId).then((user) => {
     if(!user) {
         return console.log('User id not found');
