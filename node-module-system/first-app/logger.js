@@ -1,4 +1,4 @@
-// making fake log url.
+// Making fake log url.
 var url = "http://mylogger.io/log";
 
 function log(message) {
@@ -6,4 +6,5 @@ function log(message) {
   console.log(message);
 }
 
-module.exports.log = log;
+// Export single function.
+module.exports = log;
