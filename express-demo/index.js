@@ -1,8 +1,14 @@
 const Joi = require("joi");
+const logger = require('./logger');
+const auth = require('./authenticate')
 const express = require("express");
 const app = express();
 
 app.use(express.json());
+
+app.use(logger);
+
+app.use(auth);
 
 const courses = [
   { id: 1, name: "course1" },
@@ -22,7 +28,7 @@ app.get("/api/courses/:id", (req, res) => {
   const course = courses.find(c => c.id === parseInt(req.params.id));
   if (!course)
     return res.status(404).send("The course with the given id was not found");
-    
+
   res.send(course);
 });
 
@@ -79,4 +85,4 @@ function validateCourse(course) {
 
 // PORT
 const prot = process.env.PORT || 3000;
-app.listen(prot, () => console.log(`Listening on port ${prot}}`));
+app.listen(prot, () => console.log(`Listening on port ${prot}`));
