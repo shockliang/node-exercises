@@ -1,3 +1,5 @@
+const startupDebugger = require('debug')('app:startup');
+const dbDebugger = require('debug')('app:db');
 const config = require('config');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -20,12 +22,15 @@ console.log(`Mail Password: ${config.get('mail.password')}`);
 
 if(app.get('env') === 'development') {
   app.use(morgan('tiny'));
-  console.log('Morgan enable...');
+  startupDebugger('Morgan enable...');
 }
 
 app.use(logger);
 
 app.use(auth);
+
+// Simulate db work
+dbDebugger('Connected to db...');
 
 const courses = [
   { id: 1, name: "course1" },
