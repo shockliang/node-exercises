@@ -28,3 +28,7 @@
     * in
     * nin (not in)
 
+* Logical query operators
+    * or
+    * and
+
