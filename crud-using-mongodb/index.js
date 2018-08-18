@@ -28,12 +28,16 @@ async function createCourse() {
 }
 
 async function getCourses() {
+  // For simualtes api calling - /api/courses?pageNumber=2&pageSize=10
+  const pageNumber = 2;
+  const pageSize = 10;
+
   const courses = await Course
     .find({ author: "Mosh", isPublished: true })
-    .limit(10)
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize)
     .sort({ name: 1 })
-    .count();
-    // .select({ name: 1, tags: 1 });
+    .select({ name: 1, tags: 1 });
   console.log(courses);
 }
 
