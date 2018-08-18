@@ -32,3 +32,11 @@
     * or
     * and
 
+* import data to mongodb
+    * `mongoimport --db mongo-exercises --collection courses --drop --file exercise-data.json --jsonArray`
+        * `--db`: Specify db name.
+        * `--collection`: Specify colllection name.
+        * `--file`: The file that be using to import.
+        * `--jsonArray`: The import type.
+        * `--drop`: Modifies the import process so that the target instance drops the collection before importing the data from the input.
+
