@@ -32,8 +32,7 @@ async function getCourses() {
   const pageNumber = 2;
   const pageSize = 10;
 
-  const courses = await Course
-    .find({ author: "Mosh", isPublished: true })
+  const courses = await Course.find({ author: "Mosh", isPublished: true })
     .skip((pageNumber - 1) * pageSize)
     .limit(pageSize)
     .sort({ name: 1 })
@@ -41,4 +40,15 @@ async function getCourses() {
   console.log(courses);
 }
 
-getCourses();
+async function updateCourse(id) {
+  const course = await Course.findById(id);
+  if(!course) return;
+
+  course.isPublished = true;
+  course.author = 'Another author';
+
+  const result = await course.save();
+  console.log('Result', result);
+}
+
+updateCourse('5b77c1ad9d29c044e727a6da');
