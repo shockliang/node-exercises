@@ -52,14 +52,11 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
-  const genre = genres.find(c => c.id === parseInt(req.params.id));
-  if (!genre)
-    return res.status(404).send("The genre with the given ID was not found.");
-
-  const index = genres.indexOf(genre);
-  genres.splice(index, 1);
-
-  res.send(genre);
+  removeGenre(req.params.id).then(result => {
+    if (!result)
+      return res.status(404).send(`The genre with the given ID:${req.params.id} was not found.`);
+    res.send(result);
+  });
 });
 
 router.get("/:id", (req, res) => {
@@ -69,6 +66,10 @@ router.get("/:id", (req, res) => {
     res.send(result);
   });
 });
+
+async function removeGenre(id) {
+  return await Genre.findByIdAndRemove(id);
+}
 
 async function getGenre(id) {
   return await Genre.findById(id);
