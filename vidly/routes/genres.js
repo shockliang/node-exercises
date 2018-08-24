@@ -26,7 +26,7 @@ const genres = [
 ];
 
 router.get("/", (req, res) => {
-  res.send(genres);
+  getGenres().then(genres => res.send(genres));
 });
 
 router.post("/", (req, res) => {
@@ -68,6 +68,14 @@ router.get("/:id", (req, res) => {
     return res.status(404).send("The genre with the given ID was not found.");
   res.send(genre);
 });
+
+async function getGenres() {
+  const genres = await Genre
+    .find()
+    .sort({name: 1})
+    .select({_id: 1, name: 1});
+  return genres;
+}
 
 async function createGenre(name) {
   const genre = new Genre({
