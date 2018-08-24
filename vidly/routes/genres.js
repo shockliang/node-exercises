@@ -40,21 +40,24 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-  const genre = genres.find(c => c.id === parseInt(req.params.id));
-  if (!genre)
-    return res.status(404).send("The genre with the given ID was not found.");
-
   const { error } = validateGenre(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  genre.name = req.body.name;
-  res.send(genre);
+  updateGenre(req.params.id, req.body.name)
+    .then(result => {
+      res.send(result);
+    })
+    .catch(error => {
+      res.status(404).send(error.message);
+    });
 });
 
 router.delete("/:id", (req, res) => {
   removeGenre(req.params.id).then(result => {
     if (!result)
-      return res.status(404).send(`The genre with the given ID:${req.params.id} was not found.`);
+      return res
+        .status(404)
+        .send(`The genre with the given ID:${req.params.id} was not found.`);
     res.send(result);
   });
 });
@@ -66,6 +69,18 @@ router.get("/:id", (req, res) => {
     res.send(result);
   });
 });
+
+async function updateGenre(id, name) {
+  return await Genre.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        name: name
+      }
+    },
+    { new: true }
+  );
+}
 
 async function removeGenre(id) {
   return await Genre.findByIdAndRemove(id);
