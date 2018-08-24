@@ -8,6 +8,7 @@ const Customer = mongoose.model(
   new mongoose.Schema({
     isGold: {
       type: Boolean,
+      default: false,
       required: true
     },
     name: {
@@ -90,10 +91,11 @@ function validateCustomer(Customer) {
     isGold: Joi.boolean().required(),
     name: Joi.string()
       .min(3)
+      .max(50)
       .required(),
     phone: Joi.string()
       .min(5)
-      .max(20)
+      .max(50)
       .required()
   };
 
