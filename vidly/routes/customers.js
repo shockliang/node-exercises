@@ -1,66 +1,87 @@
+const asyncMiddleware = require("../middlewares/async");
 const auth = require("../middlewares/auth");
 const { Customer, validate } = require("../models/customer");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const customers = await Customer.find().sort("name");
+router.get(
+  "/",
+  asyncMiddleware(async (req, res) => {
+    const customers = await Customer.find().sort("name");
 
-  res.send(customers);
-});
+    res.send(customers);
+  })
+);
 
-router.post("/", auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+router.post(
+  "/",
+  auth,
+  asyncMiddleware(async (req, res) => {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-  const customer = new Customer({
-    isGold: req.body.isGold,
-    name: req.body.name,
-    phone: req.body.phone
-  });
-
-  await customer.save();
-  res.send(customer);
-});
-
-router.put("/:id", auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const customer = await Customer.findByIdAndUpdate(
-    req.params.id,
-    {
+    const customer = new Customer({
       isGold: req.body.isGold,
       name: req.body.name,
       phone: req.body.phone
-    },
-    { new: true }
-  );
+    });
 
-  if (!customer)
-    return res.status(404).send("The customer with the given id was not found");
+    await customer.save();
+    res.send(customer);
+  })
+);
 
-  res.send(customer);
-});
+router.put(
+  "/:id",
+  auth,
+  asyncMiddleware(async (req, res) => {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-router.delete("/:id", auth, async (req, res) => {
-  const customer = await Customer.findByIdAndRemove(req.params.id);
-  if (!customer)
-    return res
-      .status(404)
-      .send(`The customer with the given ID:${req.params.id} was not found.`);
+    const customer = await Customer.findByIdAndUpdate(
+      req.params.id,
+      {
+        isGold: req.body.isGold,
+        name: req.body.name,
+        phone: req.body.phone
+      },
+      { new: true }
+    );
 
-  res.send(customer);
-});
+    if (!customer)
+      return res
+        .status(404)
+        .send("The customer with the given id was not found");
 
-router.get("/:id", async (req, res) => {
-  const customer = await Customer.findById(req.params.id);
-  if (!customer)
-    return res
-      .status(404)
-      .send(`The customer with the given ID:${req.params.id} was not found.`);
+    res.send(customer);
+  })
+);
 
-  res.send(customer);
-});
+router.delete(
+  "/:id",
+  auth,
+  asyncMiddleware(async (req, res) => {
+    const customer = await Customer.findByIdAndRemove(req.params.id);
+    if (!customer)
+      return res
+        .status(404)
+        .send(`The customer with the given ID:${req.params.id} was not found.`);
+
+    res.send(customer);
+  })
+);
+
+router.get(
+  "/:id",
+  asyncMiddleware(async (req, res) => {
+    const customer = await Customer.findById(req.params.id);
+    if (!customer)
+      return res
+        .status(404)
+        .send(`The customer with the given ID:${req.params.id} was not found.`);
+
+    res.send(customer);
+  })
+);
 
 module.exports = router;
