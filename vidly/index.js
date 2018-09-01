@@ -1,8 +1,9 @@
+const winston = require("winston");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const config = require("config");
 const mongoose = require("mongoose");
-const error = require('./middlewares/error');
+const error = require("./middlewares/error");
 const genres = require("./routes/genres");
 const customers = require("./routes/customers");
 const movies = require("./routes/movies");
@@ -10,8 +11,11 @@ const rentals = require("./routes/rentals");
 const users = require("./routes/users");
 const auth = require("./routes/auth");
 const express = require("express");
-require('express-async-errors');
+require("express-async-errors");
 const app = express();
+
+winston.add(new winston.transports.File({ filename: "logFile.log" }));
+winston.add(new winston.transports.Console());
 
 if (!config.get("jwtPrivateKey")) {
   console.error("FATAL ERROR: jwtPrivateKey is not defined.");
