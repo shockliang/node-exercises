@@ -10,6 +10,7 @@ const rentals = require("./routes/rentals");
 const users = require("./routes/users");
 const auth = require("./routes/auth");
 const express = require("express");
+require('express-async-errors');
 const app = express();
 
 if (!config.get("jwtPrivateKey")) {
