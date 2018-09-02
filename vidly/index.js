@@ -15,6 +15,11 @@ const express = require("express");
 require("express-async-errors");
 const app = express();
 
+process.on("uncaughtException", ex => {
+  console.log("Got the an uncaught exception");
+  winston.error(ex.message, ex);
+});
+
 winston.add(new winston.transports.File({ filename: "logFile.log" }));
 winston.add(new winston.transports.Console());
 winston.add(
@@ -23,6 +28,8 @@ winston.add(
     level: "error"
   })
 );
+
+// throw new Error("Something failed during startup.");
 
 if (!config.get("jwtPrivateKey")) {
   console.error("FATAL ERROR: jwtPrivateKey is not defined.");
