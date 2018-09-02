@@ -1,3 +1,4 @@
+// const { createLogger, transports } = require("winston");
 const winston = require("winston");
 require("winston-mongodb");
 const Joi = require("joi");
@@ -15,12 +16,21 @@ const express = require("express");
 require("express-async-errors");
 const app = express();
 
-process.on("uncaughtException", ex => {
-  console.log("Got the an uncaught exception");
-  winston.error(ex.message, ex);
+process.on("unhandledRejection", ex => {
+  throw ex;
 });
 
-winston.add(new winston.transports.File({ filename: "logFile.log" }));
+winston.add(
+  new winston.transports.File({
+    filename: "exceptions.log",
+    handleExceptions: true
+  })
+);
+winston.add(
+  new winston.transports.File({
+    filename: "logFile.log"
+  })
+);
 winston.add(new winston.transports.Console());
 winston.add(
   new winston.transports.MongoDB({
@@ -29,7 +39,12 @@ winston.add(
   })
 );
 
-// throw new Error("Something failed during startup.");
+winston.exitOnError = false;
+
+// const p = Promise.reject(new Error("Something failed miserably!"));
+// p.then(() => console.log("Done"));
+
+// throw new Error("Failed during startup");
 
 if (!config.get("jwtPrivateKey")) {
   console.error("FATAL ERROR: jwtPrivateKey is not defined.");
