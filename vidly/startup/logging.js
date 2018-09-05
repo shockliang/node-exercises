@@ -4,7 +4,6 @@ require("winston-mongodb");
 require("express-async-errors");
 
 module.exports = function() {
-
   process.on("unhandledRejection", ex => {
     throw ex;
   });
@@ -20,7 +19,9 @@ module.exports = function() {
       filename: "logFile.log"
     })
   );
-  winston.add(new winston.transports.Console());
+  winston.add(
+    new winston.transports.Console({ colorize: true, prettyPrint: true })
+  );
   winston.add(
     new winston.transports.MongoDB({
       db: "mongodb://localhost/vidly",
