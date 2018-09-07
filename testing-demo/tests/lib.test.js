@@ -24,3 +24,11 @@ describe("greet", () => {
     expect(result).toContain("shock");
   });
 });
+
+describe("getCurrencies", () => {
+  it("should return supported currencies", () => {
+    const result = lib.getCurrencies();
+
+    expect(result).toEqual(expect.arrayContaining(["EUR", "USD", "AUD"]));
+  });
+});
