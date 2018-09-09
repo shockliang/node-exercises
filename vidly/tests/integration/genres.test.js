@@ -44,7 +44,16 @@ describe("/api/genres", () => {
 
       const res = await request(server).get(`/api/genres/1`);
       expect(res.status).toBe(404);
-      
+    });
+  });
+
+  describe("POST /", () => {
+    it("should return 401 if user not logged in", async () => {
+      const res = await request(server)
+        .post("/api/genres")
+        .send({ name: "genre1" });
+
+      expect(res.status).toBe(401);
     });
   });
 });
