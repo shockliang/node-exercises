@@ -4,6 +4,7 @@ const { Genre } = require("../../models/genre");
 
 describe("auth middleware", () => {
   let token;
+  let server;
 
   beforeEach(() => {
     server = require("../../index");
