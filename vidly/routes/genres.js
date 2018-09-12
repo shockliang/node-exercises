@@ -6,6 +6,7 @@ const auth = require("../middlewares/auth");
 const { Genre, validate } = require("../models/genre");
 const express = require("express");
 const router = express.Router();
+const winston = require("winston");
 
 router.get("/", async (req, res) => {
   const genres = await Genre.find().sort("name");
@@ -22,10 +23,10 @@ router.post("/", auth, async (req, res) => {
   res.send(genre);
 });
 
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", [auth, validateObjectId], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-
+  winston.info(req.params);
   const genre = await Genre.findByIdAndUpdate(
     req.params.id,
     { name: req.body.name },
