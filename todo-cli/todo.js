@@ -1,7 +1,15 @@
 #! /usr/bin/env node
-
+const rl = require("readline");
+const low = require("lowdb");
+const FileSync = require("lowdb/adapters/FileSync");
 const chalk = require("chalk");
 const args = process.argv;
+
+const adapter = new FileSync("db.json");
+const db = low(adapter);
+
+// Set some defaults (required if your JSON file is empty)
+db.defaults({ todos: [] }).write();
 
 const commands = ["new", "get", "complete", "help"];
 
@@ -35,7 +43,7 @@ switch (args[2]) {
     usage();
     break;
   case "new":
-    console.log("new command execute!");
+    newTodo();
     break;
 
   case "get":
@@ -49,4 +57,30 @@ switch (args[2]) {
   default:
     errorLog("invalid command passed");
     usage();
+}
+
+function prompt(question) {
+  const r = rl.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: false
+  });
+  return new Promise((resolve, error) => {
+    r.question(question, answer => {
+      r.close();
+      resolve(answer);
+    });
+  });
+}
+
+function newTodo() {
+  const q = chalk.blue("Type in your todo\n");
+  prompt(q).then(todo => {
+    db.get("todos")
+      .push({
+        title: todo,
+        complete: false
+      })
+      .write();
+  });
 }
