@@ -51,7 +51,7 @@ switch (args[2]) {
     break;
 
   case "complete":
-    console.log("complete command execute!");
+    completeTodo();
     break;
 
   default:
@@ -89,7 +89,37 @@ function getTodos() {
   const todos = db.get("todos").value();
   let index = 1;
   todos.forEach(todo => {
-    const todoText = `${index++}. ${todo.title}`;
+    let todoText = chalk.bgBlackBright.whiteBright(
+      `${index++}. ${todo.title}`
+    );
+    if (todo.complete) {
+      todoText = chalk.bgBlackBright.whiteBright(`${todoText} ✔ ️`); // add a check mark
+    }
     console.log(todoText);
   });
+}
+
+function completeTodo() {
+  // check that length
+  if (args.length != 4) {
+    errorLog("invalid number of arguments passed for complete command");
+    return;
+  }
+
+  let n = Number(args[3]);
+  // check if the value is a number
+  if (isNaN(n)) {
+    errorLog("please provide a valid number for complete command");
+    return;
+  }
+
+  // check if correct length of values has been passed
+  let todosLength = db.get("todos").value().length;
+  if (n > todosLength) {
+    errorLog("invalid number passed for complete command.");
+    return;
+  }
+
+  // update the todo item marked as complete
+  db.set(`todos[${n - 1}].complete`, true).write();
 }
