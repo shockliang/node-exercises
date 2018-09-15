@@ -47,7 +47,7 @@ switch (args[2]) {
     break;
 
   case "get":
-    console.log("get command execute!");
+    getTodos();
     break;
 
   case "complete":
@@ -82,5 +82,14 @@ function newTodo() {
         complete: false
       })
       .write();
+  });
+}
+
+function getTodos() {
+  const todos = db.get("todos").value();
+  let index = 1;
+  todos.forEach(todo => {
+    const todoText = `${index++}. ${todo.title}`;
+    console.log(todoText);
   });
 }
