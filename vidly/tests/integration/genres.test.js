@@ -6,13 +6,14 @@ const mongoose = require("mongoose");
 let server;
 
 describe("/api/genres", () => {
+
   beforeEach(() => {
     server = require("../../index");
   });
 
   afterEach(async () => {
     await Genre.remove({});
-    server.close();
+    await server.close();
   });
 
   describe("GET /", () => {
