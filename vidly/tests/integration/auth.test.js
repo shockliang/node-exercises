@@ -24,13 +24,13 @@ describe("auth middleware", () => {
   };
 
   it("should return 401 if no token is provided", async () => {
-    token = '';
+    token = "";
     const res = await exec();
     expect(res.status).toBe(401);
   });
 
   it("should return 400 if no token is invalid", async () => {
-    token = 'a';
+    token = "a";
     const res = await exec();
     expect(res.status).toBe(400);
   });
@@ -39,6 +39,4 @@ describe("auth middleware", () => {
     const res = await exec();
     expect(res.status).toBe(200);
   });
-
-  
 });
