@@ -2,6 +2,7 @@ const { Rental } = require("../../models/rental");
 const { User } = require("../../models/user");
 const request = require("supertest");
 const mongoose = require("mongoose");
+const winston = require("winston");
 
 let server;
 
@@ -77,5 +78,14 @@ describe("/api/returns", () => {
     const res = await exec();
 
     expect(res.status).toBe(404);
+  });
+
+  it("should return 400 if rental already processed", async () => {
+    rental.dateReturned = new Date();
+    await rental.save();
+
+    const res = await exec();
+
+    expect(res.status).toBe(400);
   });
 });
