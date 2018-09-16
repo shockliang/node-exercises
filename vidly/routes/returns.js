@@ -2,12 +2,21 @@ const auth = require("../middlewares/auth");
 const { Rental, validate } = require("../models/rental");
 const express = require("express");
 const router = express.Router();
+const winston = require("winston");
 
 router.post("/", auth, async (req, res) => {
-  if(!req.body.customerId) return res.status(400).send('customerId not provided.');
-  if(!req.body.movieId) return res.status(400).send('movieId not provided.');
+  if (!req.body.customerId)
+    return res.status(400).send("customerId not provided.");
+  if (!req.body.movieId) return res.status(400).send("movieId not provided.");
+
+  const rental = await Rental.findOne({
+    "customer._id": req.body.customerId,
+    "movie._id": req.body.movieId
+  });
   
-  res.status(401).send('Unauthorized');
+  if (!rental) return res.status(404).send("Rental not found.");
+
+  res.status(401).send("Unauthorized");
 });
 
 module.exports = router;
